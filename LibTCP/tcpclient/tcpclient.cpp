@@ -25,22 +25,35 @@ void TCPClient::setDataToBeSent(QByteArray _)
     data_to_be_sent = _;
 }
 
-void TCPClient::sendData(QByteArray data_to_send)
+void TCPClient::receiveData()
 {
-    socket->connectToHost(m_url, m_port);
-
-    if(socket->state() == QAbstractSocket::ConnectedState)
+    qDebug() << "waiting for be connected" ;
+    if( socket->waitForConnected() )
     {
-        qDebug() << "conectado!" ;
-        if( socket->waitForConnected() )
+        if(socket->state() == QAbstractSocket::ConnectedState)
         {
-           socket->write( data_to_send );
-           qDebug() << "sent " << data_to_send;
+            qDebug() << "conectado!" ;
+            if (socket->waitForReadyRead() )
+            {
+                qDebug() << "read data " << socket->readAll();
+                socket->readAll();
+            }
         }
     }
     else
     {
         qDebug() << "no ha sido posible la conexion" ;
     }
+
+}
+
+void TCPClient::connectTCP()
+{
+    socket->connectToHost(m_url, m_port);
+}
+
+void TCPClient::disconnectTCP()
+{
     socket->disconnect();
+    qDebug() << "disconnect!";
 }

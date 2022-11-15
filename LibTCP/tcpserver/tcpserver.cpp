@@ -2,20 +2,20 @@
 
 TCPServer::TCPServer()
 {
-    server = new QTcpServer(this);
-    connect(server,  &QTcpServer::newConnection, this, &TCPServer::onNewConnection);
+    m_server = new QTcpServer(this);
+    connect(m_server,  &QTcpServer::newConnection, this, &TCPServer::onNewConnection);
 }
 
 TCPServer::~TCPServer()
 {
-    delete server;
+    delete m_server;
 }
 
 void TCPServer::listen(QString _host, quint16 port)
 {
     QHostAddress host(_host);
 
-    if(!server->listen(QHostAddress::Any, port))
+    if(!m_server->listen(QHostAddress::Any, port))
     {
         qDebug() << "Server could not start!";
     }
@@ -28,16 +28,24 @@ void TCPServer::listen(QString _host, quint16 port)
 void TCPServer::onNewConnection()
 {
     qDebug() << "new connection!! ";
-    QTcpSocket *socket = server->nextPendingConnection();
-    qDebug() << "new connection from: "<<socket->peerAddress()<<":"<<socket->peerPort();
-    socket->waitForReadyRead();
-    qDebug() << socket->bytesAvailable();
-    const int MaxLength = 1024;
-        char buffer[MaxLength + 1];
+    m_socket = m_server->nextPendingConnection();
+    m_socket->write("que paso");
 
-        qint64 byteCount = socket->read(buffer, MaxLength);
-        buffer[byteCount] = 0;
+}
 
-        qDebug() << buffer;
-    socket->close();
+void TCPServer::onReadyRead()
+{
+    qDebug() << "onReadyRead";
+    QTcpSocket* sender = static_cast<QTcpSocket*>(QObject::sender());
+    QByteArray datas = sender->readAll();
+    qDebug() << "data:" << datas;
+    qDebug() << "data:" << m_socket->readAll();
+}
+
+void TCPServer::onSocketStateChanged(QAbstractSocket::SocketState socketState)
+{
+    qDebug() << "onSocketStateChanged " << socketState;
+    if (socketState == QAbstractSocket::UnconnectedState)
+    {
+    }
 }

@@ -26,7 +26,9 @@ public:
     ~TCPClient();
     void init(QString url, int port);
     void setDataToBeSent(QByteArray _);
-    void sendData(QByteArray data_to_send);
+    void receiveData();
+    void connectTCP();
+    void disconnectTCP();
 
 private:
     QTcpSocket *socket=nullptr;

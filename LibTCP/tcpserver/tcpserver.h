@@ -21,9 +21,12 @@ signals:
 
 private slots:
     void onNewConnection();
+    void onReadyRead();
+    void onSocketStateChanged(QAbstractSocket::SocketState socketState);
 
 private:
-    QTcpServer *server;
+    QTcpServer *m_server;
+    QTcpSocket *m_socket;
 
 };
 
