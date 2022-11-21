@@ -29,6 +29,7 @@ public:
     void receiveData();
     void connectTCP();
     void disconnectTCP();
+    void sendData();
 
 private:
     QTcpSocket *socket=nullptr;

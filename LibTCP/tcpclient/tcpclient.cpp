@@ -50,10 +50,25 @@ void TCPClient::receiveData()
 void TCPClient::connectTCP()
 {
     socket->connectToHost(m_url, m_port);
+    if (socket->waitForConnected() )
+    {
+        qDebug() << "connected!";
+    }
+
 }
 
 void TCPClient::disconnectTCP()
 {
     socket->disconnect();
     qDebug() << "disconnect!";
+}
+
+void TCPClient::sendData()
+{
+    if(socket->state() == QAbstractSocket::ConnectedState)
+    {
+        qDebug() << "send data " << socket->write("escribo desde cliente");
+
+        socket->waitForBytesWritten();
+    }
 }

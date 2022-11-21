@@ -27,14 +27,31 @@ void TCPServer::listen(QString _host, quint16 port)
 
 void TCPServer::onNewConnection()
 {
-    qDebug() << "new connection!! ";
     m_socket = m_server->nextPendingConnection();
+    if (m_socket->waitForConnected())
+    {
+        qDebug() << "new connection!! ";
+    }
+    if(m_socket->state() == QAbstractSocket::ConnectedState)
+    {
+        qDebug() << "estado: " <<m_socket->state();
+        if (m_socket->waitForReadyRead() )
+        {
+            qDebug() << "read data " << m_socket->readAll();
+        }
+    }
+
+
+
     m_socket->write("que paso");
+
+    connect(m_socket,  &QTcpSocket::readyRead, this, &TCPServer::onReadyRead);
 
 }
 
 void TCPServer::onReadyRead()
 {
+
     qDebug() << "onReadyRead";
     QTcpSocket* sender = static_cast<QTcpSocket*>(QObject::sender());
     QByteArray datas = sender->readAll();

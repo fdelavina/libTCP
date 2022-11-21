@@ -27,7 +27,8 @@ int main(int argc, char** argv)
     TCPClient* my_tcp_client = new TCPClient();
     my_tcp_client->init(url, port_tcp_server);
     my_tcp_client->connectTCP();
-    my_tcp_client->receiveData();
+    //my_tcp_client->receiveData();
+    my_tcp_client->sendData();
     my_tcp_client->disconnectTCP();
 
     delete my_tcp_client;
