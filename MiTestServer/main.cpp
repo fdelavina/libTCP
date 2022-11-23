@@ -1,5 +1,6 @@
 
 #include "tcpserver/tcpserver.h"
+#include "tcpServerTest.h"
 #include <QCoreApplication>
 #include <QByteArray>
 using namespace std;
@@ -23,9 +24,10 @@ int main(int argc, char** argv)
     QString url = url_arg;
     int port_tcp_server = port_arg.toInt();
 
-    TCPServer my_tcp_server ;
-    my_tcp_server.listen(url, port_tcp_server);
-    //while(true);
+    TCPServerTest my_server_test;
+    my_server_test.serverListen(url, port_tcp_server);
+
+
 
 
     return a.exec();

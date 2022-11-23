@@ -20,11 +20,6 @@ void TCPClient::init(QString url, int port)
                 "and port " << m_port;
 }
 
-void TCPClient::setDataToBeSent(QByteArray _)
-{
-    data_to_be_sent = _;
-}
-
 void TCPClient::receiveData()
 {
     qDebug() << "waiting for be connected" ;
@@ -63,12 +58,17 @@ void TCPClient::disconnectTCP()
     qDebug() << "disconnect!";
 }
 
-void TCPClient::sendData()
+void TCPClient::sendTCPMsg(QByteArray _data_to_send)
 {
     if(socket->state() == QAbstractSocket::ConnectedState)
     {
-        qDebug() << "send data " << socket->write("escribo desde cliente");
+        socket->write(_data_to_send);
+        qDebug() << "sending data " << _data_to_send;
 
         socket->waitForBytesWritten();
+    }
+    else
+    {
+        qDebug() << "data has not been sent because no connection stablished";
     }
 }

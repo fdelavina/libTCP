@@ -25,11 +25,11 @@ public:
     TCPClient();
     ~TCPClient();
     void init(QString url, int port);
-    void setDataToBeSent(QByteArray _);
+
     void receiveData();
     void connectTCP();
     void disconnectTCP();
-    void sendData();
+    void sendTCPMsg(QByteArray _data_to_send);
 
 private:
     QTcpSocket *socket=nullptr;

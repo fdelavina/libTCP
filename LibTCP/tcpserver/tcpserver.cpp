@@ -37,27 +37,16 @@ void TCPServer::onNewConnection()
         qDebug() << "estado: " <<m_socket->state();
         if (m_socket->waitForReadyRead() )
         {
-            qDebug() << "read data " << m_socket->readAll();
+            m_incoming_msg = m_socket->readAll();
+            qDebug() << "read data " << m_incoming_msg;
+
+            emit msgTCPAvailable(m_incoming_msg);
+
         }
     }
-
-
-
-    m_socket->write("que paso");
-
-    connect(m_socket,  &QTcpSocket::readyRead, this, &TCPServer::onReadyRead);
-
 }
 
-void TCPServer::onReadyRead()
-{
 
-    qDebug() << "onReadyRead";
-    QTcpSocket* sender = static_cast<QTcpSocket*>(QObject::sender());
-    QByteArray datas = sender->readAll();
-    qDebug() << "data:" << datas;
-    qDebug() << "data:" << m_socket->readAll();
-}
 
 void TCPServer::onSocketStateChanged(QAbstractSocket::SocketState socketState)
 {

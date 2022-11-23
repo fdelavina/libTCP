@@ -22,13 +22,17 @@ int main(int argc, char** argv)
 
     QString url = url_arg;
     int port_tcp_server = port_arg.toInt();
-    QByteArray bytes_to_send = "hola que pasa";
+
 
     TCPClient* my_tcp_client = new TCPClient();
     my_tcp_client->init(url, port_tcp_server);
     my_tcp_client->connectTCP();
-    //my_tcp_client->receiveData();
-    my_tcp_client->sendData();
+
+    QByteArray array_to_be_sent;
+    array_to_be_sent.resize(2);
+    array_to_be_sent[0] = 0xFF;
+    array_to_be_sent[1] = 0x0F;
+    my_tcp_client->sendTCPMsg(array_to_be_sent);
     my_tcp_client->disconnectTCP();
 
     delete my_tcp_client;

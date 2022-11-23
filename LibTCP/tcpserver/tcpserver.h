@@ -18,15 +18,17 @@ public:
     void listen( QString _host, quint16 port);
 
 signals:
+    void msgTCPAvailable(QByteArray _data_received);
 
 private slots:
     void onNewConnection();
-    void onReadyRead();
     void onSocketStateChanged(QAbstractSocket::SocketState socketState);
 
 private:
     QTcpServer *m_server;
     QTcpSocket *m_socket;
+
+    QByteArray m_incoming_msg;
 
 };
 
